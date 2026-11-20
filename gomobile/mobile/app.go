@@ -150,6 +150,10 @@ func (a *App) Start() (err error) {
 		proxy.WithRuleManager(rm),
 		proxy.WithLogger(corelog.Func(a.logf)),
 	)
+	// Android runs in rule mode: each rule carries its own mode (mitm / tls-rf /
+	// direct / ...). The proxy server's Go default is "direct", which made the
+	// dashboard work-mode chip flip from MITM to DIRECT right after load.
+	_ = srv.SetMode(proxyModeRule)
 	srv.SetLogCallback(a.appendLog)
 	a.applyIPPoolsLocked(rm, srv)
 

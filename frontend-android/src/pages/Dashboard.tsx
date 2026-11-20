@@ -72,7 +72,8 @@ const Dashboard: React.FC = () => {
         GetStats()
       ]);
       setProxyRunning(running);
-      setProxyMode(m.toUpperCase());
+      const mode = (m || '').trim();
+      setProxyMode(mode === '' ? 'MITM' : mode.toUpperCase());
       setPort(p);
       setCaStatus(ca || { Installed: false });
       if (traffic) {
@@ -138,7 +139,10 @@ const Dashboard: React.FC = () => {
     const unlisten = EventsOn("app:state_changed", (state: any) => {
       if (!state) return;
       if (typeof state.proxyRunning === 'boolean') setProxyRunning(state.proxyRunning);
-      if (typeof state.proxyMode === 'string') setProxyMode(state.proxyMode.toUpperCase());
+      if (typeof state.proxyMode === 'string') {
+        const pm = state.proxyMode.trim();
+        setProxyMode(pm === '' ? 'MITM' : pm.toUpperCase());
+      }
       if (typeof state.tunRunning === 'boolean') {
         setTunStatus((prev: any) => ({ ...prev, running: state.tunRunning, enabled: state.tunRunning }));
         if (state.tunRunning) setIsTUNBusy(false);
