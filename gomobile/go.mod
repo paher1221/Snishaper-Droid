@@ -142,3 +142,5 @@ require (
 )
 
 tool golang.org/x/mobile/cmd/gobind
+
+replace github.com/SnishaperTeam/snishaper-core => github.com/paher1221/snishaper-core v0.8.7-ksu.1
