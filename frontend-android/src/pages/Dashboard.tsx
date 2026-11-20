@@ -199,6 +199,9 @@ const Dashboard: React.FC = () => {
     const nextEnabled = !tunStatus.running;
     try {
       if (nextEnabled) {
+        // TUN requires the local proxy listener (StartTUN rejects otherwise).
+        // StartProxy is idempotent: it is a no-op when already running.
+        await StartProxy();
         await StartTUN();
         toast.success(t('dashboard.notifications.tun_updated'), t('dashboard.notifications.tun_starting'));
         const started = await waitForTUNState(true);
